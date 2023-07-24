@@ -22,7 +22,6 @@ from typing import (
 from django.db.models import Model, QuerySet
 from django.http import HttpResponse
 from django.urls import URLPattern, path as django_path
-from injector import inject, is_decorated_with_inject
 from ninja import NinjaAPI, Router
 from ninja.constants import NOT_SET
 from ninja.security.base import AuthBase
@@ -35,11 +34,7 @@ from ninja_extra.helper import get_function_name
 from ninja_extra.operation import ControllerPathView, Operation
 from ninja_extra.permissions import AllowAny, BasePermission
 from ninja_extra.permissions.base import OperationHolderMixin
-from ninja_extra.shortcuts import (
-    fail_silently,
-    get_object_or_exception,
-    get_object_or_none,
-)
+from ninja_extra.shortcuts import get_object_or_exception, get_object_or_none
 from ninja_extra.types import PermissionType
 
 from .registry import ControllerRegistry
@@ -350,9 +345,6 @@ class APIController:
                     *cls.throttling_classes, **throttling_init_kwargs
                 )(v.route.view_func)
             self._add_operation_from_route_function(v)
-
-        if not is_decorated_with_inject(cls.__init__):
-            fail_silently(inject, constructor_or_class=cls)
 
         ControllerRegistry().add_controller(cls)
         return cls

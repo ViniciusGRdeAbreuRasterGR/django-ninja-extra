@@ -136,9 +136,8 @@ class TestAPIController:
         api.register_controllers(SomeController)
         assert _api_controller.registered
 
-    def test_controller_should_wrap_with_inject(self):
+    def test_controller_should_not_wrap_with_inject(self):
         assert not hasattr(SomeController.__init__, "__bindings__")
-        assert hasattr(SomeControllerWithInject.__init__, "__bindings__")
 
     def test_controller_should_have_path_operation_list(self):
         _api_controller = SomeControllerWithRoute.get_api_controller()

@@ -8,7 +8,7 @@ from django.http import HttpRequest, HttpResponse
 
 from ninja_extra.controllers.response import ControllerResponse
 
-from ...dependency_resolver import get_injector, service_resolver
+from ...dependency_resolver import service_resolver
 from .context import RouteContext, get_route_execution_context
 
 if TYPE_CHECKING:  # pragma: no cover
@@ -105,12 +105,9 @@ class RouteFunction(object):
         return result
 
     def _get_controller_instance(self) -> "ControllerBase":
-        injector = get_injector()
         _api_controller = self.get_api_controller()
 
-        controller_instance: "ControllerBase" = injector.create_object(
-            _api_controller.controller_class
-        )
+        controller_instance: "ControllerBase" = _api_controller.controller_class()
         return controller_instance
 
     def get_route_execution_context(
