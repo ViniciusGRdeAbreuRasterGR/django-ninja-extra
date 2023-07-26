@@ -14,7 +14,8 @@ class NinjaExtraClientBase(NinjaClientBase):
     def __init__(self, router_or_app: Union[NinjaAPI, Router, Type[ControllerBase]]):
         if hasattr(router_or_app, "get_api_controller"):
             api = NinjaExtraAPI()
-            controller_ninja_api_controller = router_or_app.get_api_controller()  # type: ignore
+            controller_instance = router_or_app()  # type: ignore
+            controller_ninja_api_controller = controller_instance.get_api_controller()
             assert controller_ninja_api_controller
             controller_ninja_api_controller.set_api_instance(api)
             self._urls_cache = list(controller_ninja_api_controller.urls_paths(""))
